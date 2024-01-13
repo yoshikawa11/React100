@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
-import HelloWorld from './component/HelloWorld';
+import Counter from './component/Counter';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <p>
-          <HelloWorld/>
+          <Counter/>
         </p>
       </header>
     </div>
