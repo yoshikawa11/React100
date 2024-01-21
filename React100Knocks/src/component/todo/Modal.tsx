@@ -42,7 +42,7 @@ const Modal: FC<ModalProps> = ({ show, switchShow, addTask }) => {
             setNewTask('');
             setErrorMessage('');
         } else {
-            setErrorMessage('タスク名を入力してしてください！');
+            setErrorMessage('タスクを入力してください');
         }
     };
     const handleModalClose = () => {
@@ -55,14 +55,14 @@ const Modal: FC<ModalProps> = ({ show, switchShow, addTask }) => {
         return (
             <div id="overlay" style={overlayCss}>
                     <div id="content" style={contentCss}>
-                        <label className="text-l block">タスクを登録</label>
+                        <label className="text-lg block mb-2 font-bold">タスクを登録</label>
                         <input 
                             type="text" 
-                            className="w-full py-2 border-b focus:outline-none focus:border-b-2 focus:border-indigo-500 text-black" 
+                            className="w-full py-2 border-b focus:outline-none focus:border-b-2 focus:border-indigo-500 text-black text-base" 
                             value={newTask} 
                             onChange={(e) => setNewTask(e.target.value)}
                         ></input>
-                        <p className="text-red-500 mt-1">{errorMessage}</p>
+                        <p className="text-red-500 mt-1 text-lg font-bold">{errorMessage}</p>
                         <p>
                             <button className="bg-blue-500 hover:bg-blue-400 text-white text-base rounded px-1 py-1 mt-2" onClick={handleAddTask}>保存</button>
                             <Spacer size={60} horizontal={true}/>
