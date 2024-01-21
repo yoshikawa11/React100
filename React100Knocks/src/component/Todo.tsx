@@ -4,14 +4,15 @@ import Modal from "./todo/Modal";
 
 function Todo() {
     const [show, setShow] = useState(false);
+    const [tasks, setTasks] = useState<task[]>([]);
     const switchShow = (): void => setShow(false);
-    
+    const addTask = (newTask: task): void => {
+        setTasks((prevTasks) => [...prevTasks, newTask]);
+        setShow(false);
+    };
     const TaskList: FC = () => {
-        let items:task[] = [
-          { id: 1, item: 'Task 1', isDone: true},
-          { id: 2, item: 'Task 2', isDone: false},
-          { id: 3, item: 'Task 3', isDone: false},
-        ];
+        let items: task[] = tasks;
+
         return (
           <>
             {items.map((item) => (
@@ -31,7 +32,7 @@ function Todo() {
             <div>TODO List</div>
             <div>{<TaskList />}</div>
             <button onClick={modalOpen}>+</button>
-            <Modal show={show} switchShow={switchShow} />
+            <Modal show={show} switchShow={switchShow} addTask={addTask} />
         </p>
         </>
     );
