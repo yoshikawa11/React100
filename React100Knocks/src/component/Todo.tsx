@@ -11,6 +11,12 @@ function Todo() {
         setTasks((prevTasks) => [...prevTasks, newTask]);
         setShow(false);
     };
+
+    const handleDeleteTask = (id: number): void => {
+        const newArr = tasks.filter((item) => item.id != id);
+        setTasks(newArr);
+    };
+
     const TaskList: FC = () => {
         let items: task[] = tasks;
 
@@ -25,7 +31,7 @@ function Todo() {
                         <span className="ms-2 text-lg text-black">
                             {item.item}
                         </span>
-                        <button className="absolute inset-y-0 right-3">✗</button> 
+                        <button className="absolute inset-y-0 right-3" onClick={() => handleDeleteTask(item.id)}>✗</button> 
                 </div>
             ))}
           </>
