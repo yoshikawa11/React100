@@ -1,6 +1,6 @@
 import { FC, useState } from "react"
-import task from "./todo/task";
-import Modal from "./todo/Modal";
+import task from "./task";
+import Modal from "./Modal";
 
 
 function Todo() {
