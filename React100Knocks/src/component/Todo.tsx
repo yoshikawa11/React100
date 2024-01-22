@@ -13,8 +13,16 @@ function Todo() {
     };
 
     const handleDeleteTask = (id: number): void => {
-        const newArr = tasks.filter((item) => item.id != id);
+        const newArr = tasks.filter((item) => item.id !== id);
         setTasks(newArr);
+    };
+
+    const handleCheckboxChange = (id: number) : void => {
+        setTasks((prevTasks) => 
+            prevTasks.map((task) => 
+                task.id === id ? {...task, isDone: !task.isDone} : task
+            )
+        );
     };
 
     const TaskList: FC = () => {
@@ -26,9 +34,14 @@ function Todo() {
                 <div key={item.id} className="text-left relative">
                     <input 
                         type="checkbox" 
-                        className="w-4 h-4 ms-3"
+                        className="w-4 h-4 ms-3" 
+                        checked={item.isDone} 
+                        onChange={() => handleCheckboxChange(item.id)}
                     />
-                        <span className="ms-2 text-lg text-black">
+                        <span 
+                            className={`ms-2 text-lg  ${
+                                item.isDone ? "text-gray-400 line-through" : "text-black"
+                            }`}>
                             {item.item}
                         </span>
                         <button className="absolute inset-y-0 right-3" onClick={() => handleDeleteTask(item.id)}>✗</button> 
