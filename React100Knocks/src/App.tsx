@@ -1,13 +1,12 @@
-import React from 'react';
 import './App.css';
-import Todo from './component/todo/Todo';
+import Timer from './component/Timer';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <p>
-          <Todo />
+          <Timer />
         </p>
       </header>
     </div>
