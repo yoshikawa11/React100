@@ -1,70 +1,63 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Timer() {
-  const [inputMinutes, setInputMinutes] = useState<number>(0);
-  const [inputSeconds, setInputSeconds] = useState<number>(0);
-  const [remainingMinutes, setRemainingMinutes] = useState<number>(0);
-  const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+  const [totalSeconds, setTotalSeconds] = useState<number>(0);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // 残り時間をカウントダウンする関数
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (remainingSeconds > 0 || remainingMinutes > 0) {
-        if (remainingSeconds === 0) {
-          setRemainingMinutes((prev) => prev - 1);
-          setRemainingSeconds(59);
-        } else {
-          setRemainingSeconds((prev) => prev - 1);
+    let interval: NodeJS.Timeout | null = null;
+
+    if (isRunning) {
+      interval = setInterval(() => {
+        if (totalSeconds > 0) {
+          setTotalSeconds((prevTotalSeconds) => prevTotalSeconds - 1);
+        }
+      }, 1000);
+    } else {
+        if (interval) {
+          clearInterval(interval);
         }
       }
-    }, 1000);
+    
+      return () => {
+        if (interval) {
+          clearInterval(interval);
+        }
+      };
+  }, [isRunning, totalSeconds]);
 
-    return () => clearInterval(interval);
-  }, [remainingMinutes, remainingSeconds]);
+  const handleStartStop = () => {
+    setIsRunning((prevIsRunning) => !prevIsRunning);
+  };
 
-  // Enter キーが押されたときに時間を設定する関数
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      setRemainingMinutes(inputMinutes);
-      setRemainingSeconds(inputSeconds);
-      if (inputRef.current) {
-        inputRef.current.blur();
-      }
-    }
+  const handleReset = () => {
+    setTotalSeconds(0);
+    setIsRunning(false);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    const seconds = parseInt(value, 10);
+    setTotalSeconds(isNaN(seconds) ? 0 : seconds);
   };
 
   return (
-    <div>
-      <div>
+    <div className="flex flex-col items-center justify-center">
+      <div className="flex items-center">
         <input
           type="number"
-          value={inputMinutes}
-          onChange={(e) => setInputMinutes(parseInt(e.target.value))}
-          onKeyPress={handleKeyPress}
-          ref={inputRef}
-        />
-        <span> : </span>
-        <input
-          type="number"
-          value={inputSeconds}
-          onChange={(e) => setInputSeconds(parseInt(e.target.value))}
-          onKeyPress={handleKeyPress}
+          value={totalSeconds}
+          onChange={handleInputChange}
+          className="w-24 h-10 text-center"
         />
       </div>
       <div>
-        <input
-          type="number"
-          value={remainingMinutes}
-          readOnly
-        />
-        <span> : </span>
-        <input
-          type="number"
-          value={remainingSeconds}
-          readOnly
-        />
+        <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400" onClick={handleStartStop}>
+          {isRunning ? 'Stop' : 'Start'}
+        </button>
+        <button className="mt-4 mx-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-400" onClick={handleReset}>
+          Reset
+        </button>
       </div>
     </div>
   );
