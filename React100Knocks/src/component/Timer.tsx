@@ -1,22 +1,53 @@
 import React, { useState, useEffect } from 'react';
 
 function Timer() {
-  const [totalSeconds, setTotalSeconds] = useState<number>(0);
+  const [totalTime, setTotalTime] = useState<number>(0);
   const [seconds, setSeconds] = useState<string>('00');
+  const [minutes, setMinutes] = useState<string>('00');
   const [isRunning, setIsRunning] = useState<boolean>(false);
+
+  const onPress = () => {
+    const audioCtx = new window.AudioContext();
+
+    const nodes = [audioCtx.createOscillator(), audioCtx.createOscillator()];
+    const hz = 1700;
+    nodes.map((node) => {
+      node.type = "sine";
+      node.frequency.setValueAtTime(hz, audioCtx.currentTime);
+      node.connect(audioCtx.destination);
+    });
+
+    const length = 0.1;
+    const rest = 0.025;
+    nodes[0].start(audioCtx.currentTime);
+    nodes[0].stop(audioCtx.currentTime + length);
+    nodes[1].start(audioCtx.currentTime + length + rest);
+    nodes[1].stop(audioCtx.currentTime + length * 2 + rest);
+  };
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
     if (isRunning) {
+      let totalSeconds = parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
+      setTotalTime(totalSeconds);
       interval = setInterval(() => {
-        // if (totalSeconds > 0) {
-        //   setTotalSeconds((prevTotalSeconds) => prevTotalSeconds - 1);
-        // }
-        const numSeconds = parseInt(seconds, 10);
-        if (numSeconds > 0) {
-            setSeconds((prevSeconds) => (parseInt(prevSeconds) - 1).toString().padStart(2, '0'));
+        if (totalTime > 0) {
+            setTotalTime((prevTotalTime) => prevTotalTime - 1);
         }
+        if (totalSeconds > 0) {
+            totalSeconds--;
+        
+            const newMinutes = Math.floor(totalSeconds / 60);
+            const newSeconds = totalSeconds % 60;
+        
+            setMinutes(newMinutes.toString().padStart(2, '0'));
+            setSeconds(newSeconds.toString().padStart(2, '0'));
+
+            if (totalSeconds == 0) onPress();
+          } else {
+            if (interval) clearInterval(interval);
+          }
       }, 1000);
     } else {
         if (interval) {
@@ -29,39 +60,43 @@ function Timer() {
           clearInterval(interval);
         }
       };
-  }, [isRunning, totalSeconds]);
+  }, [isRunning, totalTime]);
 
   const handleStartStop = () => {
     setIsRunning((prevIsRunning) => !prevIsRunning);
   };
 
   const handleReset = () => {
-    setTotalSeconds(0);
+    setTotalTime(0);
     setSeconds('00');
+    setMinutes('00');
     setIsRunning(false);
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChangeMinutes = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    // const time = parseInt(value, 10);
-    // setTotalSeconds(isNaN(time) ? 0 : time);
-    setSeconds(value);
+    setMinutes(value.padStart(2, '0'));
+  };
+
+  const handleInputChangeSeconds = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSeconds(value.padStart(2, '0'));
   };
 
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex items-center">
       <input
-          type="number"
-          value={totalSeconds} // minutesに書き換える
-          onChange={handleInputChange}
+          type="text"
+          value={minutes}
+          onChange={handleInputChangeMinutes}
           className="w-24 h-10 text-center"
         />
         <span>:</span>
         <input
           type="text"
           value={seconds}
-          onChange={handleInputChange}
+          onChange={handleInputChangeSeconds}
           className="w-24 h-10 text-center"
         />
       </div>
