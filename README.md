@@ -1,6 +1,7 @@
 # 概要
 - Reactアプリ100本ノックとして以下に続くお題を解いていきます
   - [【Reactアプリ100本ノック】01 Hello World](https://qiita.com/Sicut_study/items/3c5cd798313854a471a0)
+  - 04 Timer まで解いて休止中です
 - 使用技術
   - React
   - TypeScript
