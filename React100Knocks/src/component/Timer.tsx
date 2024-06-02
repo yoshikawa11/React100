@@ -5,6 +5,7 @@ function Timer() {
   const [seconds, setSeconds] = useState<string>('00');
   const [minutes, setMinutes] = useState<string>('00');
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const onPress = () => {
     const audioCtx = new window.AudioContext();
@@ -62,8 +63,21 @@ function Timer() {
       };
   }, [isRunning, totalTime]);
 
+  const validateInput = (minutes: number, seconds: number): boolean => {
+    if (minutes < 0 || seconds < 0 || (minutes === 0 && seconds === 0)) {
+      setErrorMessage('時間を正しく入力してください');
+      return false;
+    } else {
+      setErrorMessage('');
+      return true;
+    }
+  };
+
   const handleStartStop = () => {
+    const isValid = validateInput(parseInt(minutes), parseInt(seconds));
+  if (isValid) {
     setIsRunning((prevIsRunning) => !prevIsRunning);
+  }
   };
 
   const handleReset = () => {
@@ -108,6 +122,7 @@ function Timer() {
           Reset
         </button>
       </div>
+      {errorMessage && <div className="text-red-500">{errorMessage}</div>}
     </div>
   );
 }
