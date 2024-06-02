@@ -28,3 +28,11 @@
   <img width="250" alt="03_todo" style="margin-right: 30px" src="https://github.com/yoshikawa11/React100/assets/35718817/740b04e2-c09b-4b33-92e5-1ce7a81270a0">
   <img width="250" alt="03_todo_validation" src="https://github.com/yoshikawa11/React100/assets/35718817/9ae5858e-98b4-4a15-8d14-143657c29e06">
 </details>
+
+<details>
+<summary> 4. Timer</summary>
+  
+  - コンポーネント：Timer.tsx  
+  <img width="250" alt="04_timer" style="margin-right: 30px" src="https://github.com/yoshikawa11/React100/assets/35718817/b9386799-f24f-49b1-aeb5-2cc3bc546144">
+  <img width="250" alt="04_timer_validation" src="https://github.com/yoshikawa11/React100/assets/35718817/b033932e-d24e-4183-a0a2-79b4c8a7a8df">
+</details>
